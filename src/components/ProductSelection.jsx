@@ -34,22 +34,24 @@ function ProductSelection() {
     'https://asset.matchingcloud.com/image/98b68680-60ee-4e88-a9c0-986f5833d725.jpeg',
 };
 
+
 const addOnImages = {
   Speakers:
-    'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1692246427974-c28629e3617e?auto=format&fit=crop&w=1200&q=80',
 
   Microphones:
-    'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1643875180552-03b9bb103768?auto=format&fit=crop&w=1200&q=80',
 
   Whiteboards:
-    'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1676276377376-ab4cacc12b38?auto=format&fit=crop&w=1200&q=80',
 
   Projectors:
-    'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1589113050289-1c654e7e305d?auto=format&fit=crop&w=1200&q=80',
 
   Signage:
-    'https://images.unsplash.com/photo-1503694978374-8a2fa686963a?auto=format&fit=crop&w=1200&q=80',
+  'https://www.parrot.co.za/Portals/2/Images/Website/MainBuildingExterior/8.jpg',
 };
+
 
 const mealImages = {
   Breakfast:
