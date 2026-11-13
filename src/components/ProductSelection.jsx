@@ -20,7 +20,7 @@ function ProductSelection() {
   const roomImages = {
   'Auditorium Hall':
   'https://images.unsplash.com/photo-1778876091112-f7e985acdb01?auto=format&fit=crop&fm=jpg&q=80&w=1200',
-  
+
   'Conference Room':
     'https://brasierfreeth.com/wp-content/uploads/2020/03/Compass-1-1.jpg',
 
@@ -34,60 +34,99 @@ function ProductSelection() {
     'https://asset.matchingcloud.com/image/98b68680-60ee-4e88-a9c0-986f5833d725.jpeg',
 };
 
+const addOnImages = {
+  Speakers:
+    'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1200&q=80',
+
+  Microphones:
+    'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=1200&q=80',
+
+  Whiteboards:
+    'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80',
+
+  Projectors:
+    'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80',
+
+  Signage:
+    'https://images.unsplash.com/photo-1503694978374-8a2fa686963a?auto=format&fit=crop&w=1200&q=80',
+};
+
+const mealImages = {
+  Breakfast:
+    'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=1200&q=80',
+
+  Lunch:
+    'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80',
+
+  'High Tea':
+    'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=1200&q=80',
+
+  Dinner:
+  'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=1200&q=80',
+  };
   const formatCurrency = (amount) =>
     `$${amount.toLocaleString('en-US')}`;
 
-  const renderItems = (items, category) => (
-    <div className="product-grid">
-      {items.map((item, index) => (
-        <div className="product-card" key={item.name}>
-  {category === 'rooms' && (
-    <img
-      className="product-image"
-      src={roomImages[item.name]}
-      alt={item.name}
-    />
-  )}
+ 
+const renderItems = (items, category) => (
+  <div className="product-grid">
+    {items.map((item, index) => (
+      <div className="product-card" key={item.name}>
+        {category === 'rooms' && (
+          <img
+            className="product-image"
+            src={roomImages[item.name]}
+            alt={item.name}
+          />
+        )}
 
-  <div className="product-info">
-            <h3>{item.name}</h3>
+        {category === 'addons' && (
+          <img
+            className="product-image"
+            src={addOnImages[item.name]}
+            alt={item.name}
+          />
+        )}
 
-            {item.capacity && (
-              <p className="product-capacity">
-                Capacity: {item.capacity} people
-              </p>
-            )}
+        <div className="product-info">
+          <h3>{item.name}</h3>
 
-            <p className="product-price">
-              {formatCurrency(item.price)} each
+          {item.capacity && (
+            <p className="product-capacity">
+              Capacity: {item.capacity} people
             </p>
-          </div>
+          )}
 
-          <div className="quantity-controls">
-            <button
-              className="quantity-btn"
-              onClick={() =>
-                dispatch(decrementItem({ category, index }))
-              }
-            >
-              −
-            </button>
-
-            <span className="quantity">{item.quantity}</span>
-
-            <button
-              className="quantity-btn"
-              onClick={() =>
-                dispatch(incrementItem({ category, index }))
-              }
-            >
-              +
-            </button>
-          </div>
+          <p className="product-price">
+            {formatCurrency(item.price)} each
+          </p>
         </div>
-      ))}
-    </div>
-  );
+
+        <div className="quantity-controls">
+          <button
+            className="quantity-btn"
+            onClick={() =>
+              dispatch(decrementItem({ category, index }))
+            }
+          >
+            −
+          </button>
+
+          <span className="quantity">{item.quantity}</span>
+
+          <button
+            className="quantity-btn"
+            onClick={() =>
+              dispatch(incrementItem({ category, index }))
+            }
+          >
+            +
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+);
 
   const roomTotal = rooms.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -210,8 +249,7 @@ function ProductSelection() {
               </div>
             </div>
 
-            {renderItems(addOns, 'addOns')}
-
+           {renderItems(addOns, 'addons')}
             <div className="section-total">
               <span>Add-ons Total</span>
               <strong>{formatCurrency(addOnTotal)}</strong>
@@ -232,6 +270,11 @@ function ProductSelection() {
             <div className="product-grid">
               {meals.map((meal, index) => (
                 <div className="product-card meal-card" key={meal.name}>
+                    <img
+                        className="product-image"
+                        src={mealImages[meal.name]}
+                        alt={meal.name}
+                        />
                   <div className="product-info">
                     <label>
                       <input
