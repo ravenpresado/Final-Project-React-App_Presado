@@ -17,6 +17,23 @@ function ProductSelection() {
   const [showDetails, setShowDetails] = useState(false);
   const [activeSection, setActiveSection] = useState('rooms');
 
+  const roomImages = {
+  'Auditorium Hall':
+  'https://images.unsplash.com/photo-1778876091112-f7e985acdb01?auto=format&fit=crop&fm=jpg&q=80&w=1200',
+  
+  'Conference Room':
+    'https://brasierfreeth.com/wp-content/uploads/2020/03/Compass-1-1.jpg',
+
+  'Presentation Room':
+    'https://mapping-solutions.com.eg/assets/projector-D3--muXM.jpg',
+
+  'Large Meeting Room':
+    'https://soundlab.com.ua/upload/medialibrary/631/63190493b66f578a97f780236c282588.png',
+
+  'Small Meeting Room':
+    'https://asset.matchingcloud.com/image/98b68680-60ee-4e88-a9c0-986f5833d725.jpeg',
+};
+
   const formatCurrency = (amount) =>
     `$${amount.toLocaleString('en-US')}`;
 
@@ -24,7 +41,15 @@ function ProductSelection() {
     <div className="product-grid">
       {items.map((item, index) => (
         <div className="product-card" key={item.name}>
-          <div className="product-info">
+  {category === 'rooms' && (
+    <img
+      className="product-image"
+      src={roomImages[item.name]}
+      alt={item.name}
+    />
+  )}
+
+  <div className="product-info">
             <h3>{item.name}</h3>
 
             {item.capacity && (
