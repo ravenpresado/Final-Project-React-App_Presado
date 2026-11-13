@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   incrementItem,
@@ -11,6 +12,8 @@ function ProductSelection() {
   const { rooms, addOns, meals } = useSelector(
     (state) => state.selections
   );
+
+  const [showDetails, setShowDetails] = useState(false);
 
   const renderItems = (items, category) => (
     <div className="product-grid">
@@ -40,9 +43,7 @@ function ProductSelection() {
               −
             </button>
 
-            <span className="quantity">
-              {item.quantity}
-            </span>
+            <span className="quantity">{item.quantity}</span>
 
             <button
               className="quantity-btn"
@@ -58,9 +59,45 @@ function ProductSelection() {
     </div>
   );
 
+  const selectedItems = [
+    ...rooms
+      .filter((item) => item.quantity > 0)
+      .map((item) => ({
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        subtotal: item.price * item.quantity,
+      })),
+
+    ...addOns
+      .filter((item) => item.quantity > 0)
+      .map((item) => ({
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        subtotal: item.price * item.quantity,
+      })),
+
+    ...meals
+      .filter((item) => item.people > 0)
+      .map((item) => ({
+        name: item.name,
+        price: item.price,
+        quantity: item.people,
+        subtotal: item.price * item.people,
+      })),
+  ];
+
+  const totalCost = selectedItems.reduce(
+    (total, item) => total + item.subtotal,
+    0
+  );
+
+  const formatCurrency = (amount) =>
+    `$${amount.toLocaleString('en-US')}`;
+
   return (
     <div className="planner-page">
-
       <header className="planner-header">
         <div className="planner-brand">
           <h2>Conference Planner</h2>
@@ -70,11 +107,17 @@ function ProductSelection() {
           <a href="#rooms">Rooms</a>
           <a href="#addons">Add-ons</a>
           <a href="#meals">Meals</a>
+
+          <button
+            className="show-details-btn"
+            onClick={() => setShowDetails(true)}
+          >
+            Show Details
+          </button>
         </nav>
       </header>
 
       <main className="planner-container">
-
         <div className="planner-title">
           <p className="planner-subtitle">PLAN YOUR EVENT</p>
           <h1>Conference Expense Planner</h1>
@@ -154,8 +197,75 @@ function ProductSelection() {
             ))}
           </div>
         </section>
-
       </main>
+
+      {showDetails && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowDetails(false)}
+        >
+          <div
+            className="details-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="modal-header">
+              <div>
+                <p className="planner-subtitle">YOUR SELECTIONS</p>
+                <h2>Conference Details</h2>
+              </div>
+
+              <button
+                className="modal-close-btn"
+                onClick={() => setShowDetails(false)}
+              >
+                ×
+              </button>
+            </div>
+
+            {selectedItems.length === 0 ? (
+              <p className="empty-details">
+                You have not selected any items yet.
+              </p>
+            ) : (
+              <div className="details-table-wrapper">
+                <table className="details-table">
+                  <thead>
+                    <tr>
+                      <th>Selection Type</th>
+                      <th>Unit Cost</th>
+                      <th>Quantity</th>
+                      <th>Subtotal</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {selectedItems.map((item) => (
+                      <tr key={item.name}>
+                        <td>{item.name}</td>
+                        <td>{formatCurrency(item.price)}</td>
+                        <td>{item.quantity}</td>
+                        <td>{formatCurrency(item.subtotal)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <div className="modal-total">
+              <span>Total Cost</span>
+              <strong>{formatCurrency(totalCost)}</strong>
+            </div>
+
+            <button
+              className="modal-done-btn"
+              onClick={() => setShowDetails(false)}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
