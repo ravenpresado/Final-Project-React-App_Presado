@@ -1,0 +1,15 @@
+
+#root {
+  min-height: 100vh;
+}
+
+.planner-placeholder {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 30px;
+  text-align: center;
+}
