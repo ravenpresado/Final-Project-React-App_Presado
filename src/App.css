@@ -469,3 +469,18 @@
   margin-top: 10px;
 }
 
+/* Section Navigation Buttons */
+.planner-nav button {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.planner-nav button:hover {
+  background-color: #bfdbfe;
+}
