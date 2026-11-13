@@ -16,12 +16,12 @@ const initialState = {
     { name: 'Projectors', price: 200, quantity: 0 },
     { name: 'Signage', price: 80, quantity: 0 },
   ],
-  meals: [
-    { name: 'Breakfast', price: 50, people: 0 },
-    { name: 'Lunch', price: 60, people: 0 },
-    { name: 'High Tea', price: 25, people: 0 },
-    { name: 'Dinner', price: 70, people: 0 },
-  ],
+ meals: [
+  { name: 'Breakfast', price: 50, people: 0, selected: false },
+  { name: 'Lunch', price: 65, people: 0, selected: false },
+  { name: 'High Tea', price: 25, people: 0, selected: false },
+  { name: 'Dinner', price: 70, people: 0, selected: false },
+],
 };
 
 const selectionsSlice = createSlice({
@@ -42,6 +42,10 @@ const selectionsSlice = createSlice({
       const { index, people } = action.payload;
       state.meals[index].people = Math.max(0, Number(people) || 0);
     },
+    toggleMeal: (state, action) => {
+  state.meals[action.payload].selected =
+    !state.meals[action.payload].selected;
+},
   },
 });
 
@@ -49,6 +53,9 @@ export const {
   incrementItem,
   decrementItem,
   updateMealPeople,
+  toggleMeal,
 } = selectionsSlice.actions;
 
 export default selectionsSlice.reducer;
+
+

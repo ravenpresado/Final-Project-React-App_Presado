@@ -5,6 +5,7 @@ import {
   incrementItem,
   decrementItem,
   updateMealPeople,
+  toggleMeal,
 } from '../features/selections/selectionsSlice';
 
 function ProductSelection() {
@@ -14,6 +15,10 @@ function ProductSelection() {
   );
 
   const [showDetails, setShowDetails] = useState(false);
+  const [activeSection, setActiveSection] = useState('rooms');
+
+  const formatCurrency = (amount) =>
+    `$${amount.toLocaleString('en-US')}`;
 
   const renderItems = (items, category) => (
     <div className="product-grid">
@@ -29,7 +34,7 @@ function ProductSelection() {
             )}
 
             <p className="product-price">
-              ${item.price.toLocaleString()} each
+              {formatCurrency(item.price)} each
             </p>
           </div>
 
@@ -59,6 +64,22 @@ function ProductSelection() {
     </div>
   );
 
+  const roomTotal = rooms.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  const addOnTotal = addOns.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
+
+  const mealTotal = meals.reduce(
+    (total, item) =>
+      total + (item.selected ? item.price * item.people : 0),
+    0
+  );
+
   const selectedItems = [
     ...rooms
       .filter((item) => item.quantity > 0)
@@ -79,7 +100,7 @@ function ProductSelection() {
       })),
 
     ...meals
-      .filter((item) => item.people > 0)
+      .filter((item) => item.selected && item.people > 0)
       .map((item) => ({
         name: item.name,
         price: item.price,
@@ -93,9 +114,6 @@ function ProductSelection() {
     0
   );
 
-  const formatCurrency = (amount) =>
-    `$${amount.toLocaleString('en-US')}`;
-
   return (
     <div className="planner-page">
       <header className="planner-header">
@@ -104,9 +122,17 @@ function ProductSelection() {
         </div>
 
         <nav className="planner-nav">
-          <a href="#rooms">Rooms</a>
-          <a href="#addons">Add-ons</a>
-          <a href="#meals">Meals</a>
+          <button onClick={() => setActiveSection('rooms')}>
+            Rooms
+          </button>
+
+          <button onClick={() => setActiveSection('addons')}>
+            Add-ons
+          </button>
+
+          <button onClick={() => setActiveSection('meals')}>
+            Meals
+          </button>
 
           <button
             className="show-details-btn"
@@ -127,76 +153,105 @@ function ProductSelection() {
           </p>
         </div>
 
-        <section id="rooms" className="selection-section">
-          <div className="section-heading">
-            <span className="section-number">01</span>
-            <div>
-              <h2>Room Selection</h2>
-              <p>Choose the rooms needed for your conference.</p>
-            </div>
-          </div>
-
-          {renderItems(rooms, 'rooms')}
-        </section>
-
-        <section id="addons" className="selection-section">
-          <div className="section-heading">
-            <span className="section-number">02</span>
-            <div>
-              <h2>Add-ons Selection</h2>
-              <p>
-                Select the audio and visual equipment
-                for your presentations.
-              </p>
-            </div>
-          </div>
-
-          {renderItems(addOns, 'addOns')}
-        </section>
-
-        <section id="meals" className="selection-section">
-          <div className="section-heading">
-            <span className="section-number">03</span>
-            <div>
-              <h2>Meals Selection</h2>
-              <p>Enter the number of people for each meal.</p>
-            </div>
-          </div>
-
-          <div className="product-grid">
-            {meals.map((meal, index) => (
-              <div className="product-card meal-card" key={meal.name}>
-                <div className="product-info">
-                  <h3>{meal.name}</h3>
-                  <p className="product-price">
-                    ${meal.price.toLocaleString()} per person
-                  </p>
-                </div>
-
-                <div className="meal-input">
-                  <label htmlFor={`meal-${index}`}>
-                    Number of people
-                  </label>
-
-                  <input
-                    id={`meal-${index}`}
-                    type="number"
-                    min="0"
-                    value={meal.people}
-                    onChange={(event) =>
-                      dispatch(
-                        updateMealPeople({
-                          index,
-                          people: event.target.value,
-                        })
-                      )
-                    }
-                  />
-                </div>
+        {activeSection === 'rooms' && (
+          <section className="selection-section">
+            <div className="section-heading">
+              <span className="section-number">01</span>
+              <div>
+                <h2>Room Selection</h2>
+                <p>Choose the rooms needed for your conference.</p>
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+
+            {renderItems(rooms, 'rooms')}
+
+            <div className="section-total">
+              <span>Rooms Total</span>
+              <strong>{formatCurrency(roomTotal)}</strong>
+            </div>
+          </section>
+        )}
+
+        {activeSection === 'addons' && (
+          <section className="selection-section">
+            <div className="section-heading">
+              <span className="section-number">02</span>
+              <div>
+                <h2>Add-ons Selection</h2>
+                <p>
+                  Select the audio and visual equipment
+                  for your presentations.
+                </p>
+              </div>
+            </div>
+
+            {renderItems(addOns, 'addOns')}
+
+            <div className="section-total">
+              <span>Add-ons Total</span>
+              <strong>{formatCurrency(addOnTotal)}</strong>
+            </div>
+          </section>
+        )}
+
+        {activeSection === 'meals' && (
+          <section className="selection-section">
+            <div className="section-heading">
+              <span className="section-number">03</span>
+              <div>
+                <h2>Meals Selection</h2>
+                <p>Choose meals and enter the number of people.</p>
+              </div>
+            </div>
+
+            <div className="product-grid">
+              {meals.map((meal, index) => (
+                <div className="product-card meal-card" key={meal.name}>
+                  <div className="product-info">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={meal.selected}
+                        onChange={() => dispatch(toggleMeal(index))}
+                      />
+                      {meal.name}
+                    </label>
+
+                    <p className="product-price">
+                      {formatCurrency(meal.price)} per person
+                    </p>
+                  </div>
+
+                  <div className="meal-input">
+                    <label htmlFor={`meal-${index}`}>
+                      Number of people
+                    </label>
+
+                    <input
+                      id={`meal-${index}`}
+                      type="number"
+                      min="0"
+                      value={meal.people}
+                      onChange={(event) =>
+                        dispatch(
+                          updateMealPeople({
+                            index,
+                            people: event.target.value,
+                          })
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="section-total">
+              <span>Meals Total</span>
+              <strong>{formatCurrency(mealTotal)}</strong>
+            </div>
+          </section>
+        )}
       </main>
 
       {showDetails && (
