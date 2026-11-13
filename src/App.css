@@ -159,7 +159,10 @@
 .quantity-controls {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 14px;
+  width: 100%;
+  margin-top: 12px;
 }
 
 .quantity-btn {
@@ -423,10 +426,43 @@
   color: #172554;
 }
 
-.product-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 12px 12px 0 0;
-  display: block;
+/* Product Card Layout */
+.product-card {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 20px;
+  align-items: center;
 }
+
+/* Product Images */
+.product-image {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  width: 150px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Product Information */
+.product-info {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* Quantity Controls */
+.quantity-controls {
+  grid-column: 2;
+  grid-row: 2;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+/* Meals Input */
+.meal-card .meal-input {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 10px;
+}
+
