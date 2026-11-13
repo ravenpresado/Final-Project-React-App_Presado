@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import LandingPage from './components/LandingPage';
+import ProductSelection from './components/ProductSelection';
 import './App.css';
 
 function App() {
@@ -13,10 +14,7 @@ function App() {
           onGetStarted={() => setShowPlanner(true)}
         />
       ) : (
-        <div className="planner-placeholder">
-          <h1>Conference Expense Planner</h1>
-          <p>Welcome to your conference planning dashboard!</p>
-        </div>
+        <ProductSelection />
       )}
     </>
   );
